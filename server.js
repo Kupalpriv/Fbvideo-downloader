@@ -38,10 +38,10 @@ app.get("/proxy", async (req, res) => {
     if (!videoUrl) return res.status(400).json({ error: "No URL provided" });
 
     try {
-        console.log("📡 Proxying video:", videoUrl);
+        console.log("📡 Proxying video for download:", videoUrl);
         const response = await axios.get(videoUrl, { responseType: "stream" });
 
-        res.setHeader("Content-Disposition", `attachment; filename="video.mp4"`);
+        res.setHeader("Content-Disposition", "attachment; filename=video.mp4");
         res.setHeader("Content-Type", "video/mp4");
 
         response.data.pipe(res);
