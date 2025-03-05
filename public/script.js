@@ -15,6 +15,7 @@ function downloadVideo() {
                 let confirmation = confirm(`📌 Title: ${data.title}\n🎥 Quality: ${data.quality}\n🖼 Thumbnail: ${data.thumbnail}\n\nClick "OK" to download.`);
 
                 if (confirmation) {
+                    // Create a temporary anchor element to trigger the download
                     let a = document.createElement("a");
                     a.href = data.videoUrl;
                     a.download = `${data.title || "facebook_video"}.mp4`;  
