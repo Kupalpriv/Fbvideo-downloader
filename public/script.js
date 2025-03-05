@@ -9,19 +9,13 @@ function downloadVideo() {
     let apiUrl = `/download?url=${encodeURIComponent(fbUrl)}`;
 
     fetch(apiUrl)
-        .then(response => response.json())
+        .then(response => response.text())  
         .then(data => {
-            if (data.videoUrl) {
-                let confirmation = confirm(`📌 Title: ${data.title}\n🎥 Quality: ${data.quality}\n🖼 Thumbnail: ${data.thumbnail}\n\nClick "OK" to download.`);
-
+            if (data.includes("/proxy?video=")) {
+                let confirmation = confirm("🎥 Video found! Click OK to download.");
+                
                 if (confirmation) {
-                    let a = document.createElement("a");
-                    a.href = data.videoUrl;
-                    a.download = `${data.title || "facebook_video"}.mp4`;  
-                    a.style.display = "none";
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
+                    window.location.href = data.trim(); 
                 }
             } else {
                 alert("❌ Failed to fetch video. Please check the URL!");
