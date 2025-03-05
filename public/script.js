@@ -1,7 +1,7 @@
 function downloadVideo() {
     let fbUrl = document.getElementById("fbUrl").value;
 
-    if (!fbUrl) {
+    if (!fbUrl.trim()) {
         alert("⚠️ Please enter a valid Facebook video URL!");
         return;
     }
@@ -25,12 +25,4 @@ function downloadVideo() {
             console.error("Error fetching video:", error);
             alert("⚠️ An error occurred. Please try again later.");
         });
-}
-
-function pasteLink() {
-    navigator.clipboard.readText().then(text => {
-        document.getElementById("fbUrl").value = text;
-    }).catch(err => {
-        console.error("Failed to paste:", err);
-    });
 }
