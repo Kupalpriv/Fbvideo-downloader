@@ -1,33 +1,34 @@
 function downloadVideo() {
-    let chilli = document.getElementById("fbUrl").value;
+    let fbUrl = document.getElementById("fbUrl").value;
 
-    if (!chilli) {
+    if (!fbUrl) {
         alert("⚠️ Please enter a valid Facebook video URL!");
         return;
     }
 
-    let champi = `/download?url=${encodeURIComponent(chilli)}`;
+    let apiUrl = `/download?url=${encodeURIComponent(fbUrl)}`;
 
-    fetch(champi)
-        .then(beluga => beluga.json())
-        .then(beluga => {
-            if (beluga.videoUrl) {
-                let confirmation = confirm(`📌 Title: ${beluga.title}\n🎥 Quality: ${beluga.quality}\n🖼 Thumbnail: ${beluga.thumbnail}\n\nClick "OK" to download.`);
-                
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.videoUrl) {
+                let confirmation = confirm(`📌 Title: ${data.title}\n🎥 Quality: ${data.quality}\n🖼 Thumbnail: ${data.thumbnail}\n\nClick "OK" to download.`);
+
                 if (confirmation) {
-                    let champi = document.createElement("a");
-                    champi.href = beluga.videoUrl;
-                    champi.download = "facebook_video.mp4"; 
-                    document.body.appendChild(champi);
-                    champi.click();
-                    document.body.removeChild(champi);
+                    let a = document.createElement("a");
+                    a.href = data.videoUrl;
+                    a.download = `${data.title || "facebook_video"}.mp4`;  
+                    a.style.display = "none";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
                 }
             } else {
                 alert("❌ Failed to fetch video. Please check the URL!");
             }
         })
-        .catch(champi => {
-            console.error("Error fetching video:", champi);
+        .catch(error => {
+            console.error("Error fetching video:", error);
             alert("⚠️ An error occurred. Please try again later.");
         });
 }
