@@ -60,20 +60,72 @@
         .footer a:hover {
             color: #007bff;
         }
+        .icon-container {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .icon-wrapper {
+            position: relative;
+            display: inline-block;
+        }
         .icon {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 1rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7), 0 0 20px rgba(0, 123, 255, 0.5);
             cursor: pointer;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+        .icon:hover {
+            transform: rotate(360deg);
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.9), 0 0 40px rgba(0, 123, 255, 0.7);
+        }
+        .arrow {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #fff;
+            animation: bounce 2s infinite;
+        }
+        .icon-text {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .icon-container:hover .icon-text {
+            opacity: 1;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="icon.jpg" alt="Churchill Icon" class="icon" onclick="window.open('https://www.facebook.com/Churchill.Dev4100', '_blank')">
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <img src="icon.jpg" alt="Churchill Icon" class="icon" onclick="window.open('https://www.facebook.com/Churchill.Dev4100', '_blank')">
+                <div class="arrow">↓</div>
+            </div>
+            <div class="icon-text">Click this icon to see the developer's FB</div>
+        </div>
         <h1 class="mb-4"><i class="fas fa-video"></i> Facebook Video Downloader</h1>
         <div class="input-group mb-3">
-            <input type="text" id="fbUrl" class="form-control" placeholder="Enter Facebook Video URL">
+            <input type="text" id="fbUrl" class="form-control" placeholder="paste Facebook Video link">
             <button class="btn btn-outline-light" onclick="pasteLink()"><i class="fas fa-paste"></i></button>
         </div>
         <button class="btn btn-primary w-100" onclick="downloadVideo()">
