@@ -15,7 +15,6 @@ function downloadVideo() {
                 let confirmation = confirm(`📌 Title: ${data.title}\n🎥 Quality: ${data.quality}\n🖼 Thumbnail: ${data.thumbnail}\n\nClick "OK" to download.`);
 
                 if (confirmation) {
-                    // Use the proxy endpoint to force download
                     window.location.href = `/proxy?url=${encodeURIComponent(data.videoUrl)}`;
                 }
             } else {
@@ -26,4 +25,12 @@ function downloadVideo() {
             console.error("Error fetching video:", error);
             alert("⚠️ An error occurred. Please try again later.");
         });
+}
+
+function pasteLink() {
+    navigator.clipboard.readText().then(text => {
+        document.getElementById("fbUrl").value = text;
+    }).catch(err => {
+        console.error("Failed to paste:", err);
+    });
 }
