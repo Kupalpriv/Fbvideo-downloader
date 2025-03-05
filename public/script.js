@@ -12,14 +12,16 @@ function downloadVideo() {
         .then(beluga => beluga.json())
         .then(beluga => {
             if (beluga.videoUrl) {
-                alert(`📌 Title: ${beluga.title}\n🎥 Quality: ${beluga.quality}\n🖼 Thumbnail: ${beluga.thumbnail}`);
-
-                let champi = document.createElement("a");
-                champi.href = beluga.videoUrl;
-                champi.download = "facebook_video.mp4"; 
-                document.body.appendChild(champi);
-                champi.click();
-                document.body.removeChild(champi);
+                let confirmation = confirm(`📌 Title: ${beluga.title}\n🎥 Quality: ${beluga.quality}\n🖼 Thumbnail: ${beluga.thumbnail}\n\nClick "OK" to download.`);
+                
+                if (confirmation) {
+                    let champi = document.createElement("a");
+                    champi.href = beluga.videoUrl;
+                    champi.download = "facebook_video.mp4"; 
+                    document.body.appendChild(champi);
+                    champi.click();
+                    document.body.removeChild(champi);
+                }
             } else {
                 alert("❌ Failed to fetch video. Please check the URL!");
             }
