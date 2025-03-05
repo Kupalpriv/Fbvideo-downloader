@@ -1,33 +1,31 @@
 function downloadVideo() {
-    let videoUrl = document.getElementById("fbUrl").value;
+    let chilli = document.getElementById("fbUrl").value;
 
-    if (!videoUrl) {
+    if (!chilli) {
         alert("⚠️ Please enter a valid Facebook video URL!");
         return;
     }
 
-    let apiUrl = `https://kaiz-apis.gleeze.com/api/fbdl?url=${encodeURIComponent(videoUrl)}`;
+    let champi = `/download?url=${encodeURIComponent(chilli)}`;
 
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (data.videoUrl) {
-                // Display video details in an alert
-                alert(`📌 Title: ${data.title}\n🎥 Quality: ${data.quality}\n🖼 Thumbnail: ${data.thumbnail}`);
+    fetch(champi)
+        .then(beluga => beluga.json())
+        .then(beluga => {
+            if (beluga.videoUrl) {
+                alert(`📌 Title: ${beluga.title}\n🎥 Quality: ${beluga.quality}\n🖼 Thumbnail: ${beluga.thumbnail}`);
 
-                // Automatically trigger the download
-                let a = document.createElement("a");
-                a.href = data.videoUrl;
-                a.download = "facebook_video.mp4"; 
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                let champi = document.createElement("a");
+                champi.href = beluga.videoUrl;
+                champi.download = "facebook_video.mp4"; 
+                document.body.appendChild(champi);
+                champi.click();
+                document.body.removeChild(champi);
             } else {
                 alert("❌ Failed to fetch video. Please check the URL!");
             }
         })
-        .catch(error => {
-            console.error("Error fetching video:", error);
+        .catch(champi => {
+            console.error("Error fetching video:", champi);
             alert("⚠️ An error occurred. Please try again later.");
         });
 }
