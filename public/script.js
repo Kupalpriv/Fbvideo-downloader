@@ -22,8 +22,13 @@ function downloadVideo() {
             if (data.videoUrl) {
                 let confirmation = confirm(`📌 Title: ${data.title}\n🎥 Quality: ${data.quality}\n\nClick "OK" to download.`);
                 if (confirmation) {
-                    // Direct download without proxy
-                    window.open(data.videoUrl, "_blank");
+                    // Gamit ang /proxy para i-force download ang video
+                    let downloadLink = document.createElement("a");
+                    downloadLink.href = `/proxy?url=${encodeURIComponent(data.videoUrl)}`;
+                    downloadLink.download = "video.mp4";
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
                 }
             } else {
                 alert("❌ Failed to fetch video. Please check the URL!");
