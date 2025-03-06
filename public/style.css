@@ -26,23 +26,6 @@ body {
     margin-bottom: 15px;
 }
 
-.input-group {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.input-group .form-control {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: #fff;
-}
-
-.input-group .btn {
-    margin-left: 10px;
-}
-
 #thumbnail-container {
     margin-top: 15px;
 }
@@ -51,17 +34,15 @@ body {
     width: 100%;
     max-width: 300px;
     display: none;
-    border-radius: 10px;
 }
 
 .footer {
-    margin-top: 20px;
+    margin-top: 2rem;
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
-    text-align: center;
 }
 
-.footer a {
+.animated-link {
     color: #ffcc00;
     text-decoration: none;
     font-weight: bold;
