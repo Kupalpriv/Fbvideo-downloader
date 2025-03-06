@@ -1,49 +1,67 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("✅ Script Loaded!");
+    
+    if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+    }
+
+    document.getElementById("toggleDarkMode").addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
+    });
 });
 
-function downloadVideo() {
+function fetchVideo() {
     let fbUrl = document.getElementById("fbUrl").value;
-
     if (!fbUrl) {
         alert("⚠️ Please enter a valid Facebook video URL!");
         return;
     }
 
-    let apiUrl = `/download?url=${encodeURIComponent(fbUrl)}`;
+    document.getElementById("loading").classList.remove("d-none");
+    document.getElementById("videoOptions").classList.add("d-none");
 
-    console.log("🔍 Sending request to:", apiUrl);
-
-    fetch(apiUrl)
+    fetch(`/download?url=${encodeURIComponent(fbUrl)}`)
         .then(response => response.json())
         .then(data => {
-            console.log("✅ API Response:", data);
+            document.getElementById("loading").classList.add("d-none");
 
-            if (data.videoUrl) {
-                let confirmation = confirm(`📌 Title: ${data.title}\n🎥 Quality: ${data.quality}\n\nClick "OK" to download.`);
-                if (confirmation) {
-                    // Gamit ang /proxy para i-force download ang video
-                    let downloadLink = document.createElement("a");
-                    downloadLink.href = `/proxy?url=${encodeURIComponent(data.videoUrl)}`;
-                    downloadLink.download = "video.mp4";
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
-                }
-            } else {
-                alert("❌ Failed to fetch video. Please check the URL!");
+            if (data.error) {
+                alert("❌ Error fetching video. Please check the URL.");
+                return;
             }
+
+            let resolutionButtons = document.getElementById("resolutionButtons");
+            resolutionButtons.innerHTML = "";
+            data.resolutions.forEach(res => {
+                let btn = document.createElement("button");
+                btn.className = "btn btn-primary m-2";
+                btn.innerText = `${res.quality}p`;
+                btn.onclick = () => downloadVideo(res.url);
+                resolutionButtons.appendChild(btn);
+            });
+
+            document.getElementById("videoOptions").classList.remove("d-none");
+            document.getElementById("copyLinkBtn").onclick = () => copyLink(data.videoUrl);
         })
-        .catch(error => {
-            console.error("❌ Error fetching video:", error);
-            alert("⚠️ An error occurred. Please try again later.");
+        .catch(() => {
+            alert("⚠️ Unable to fetch video.");
+            document.getElementById("loading").classList.add("d-none");
         });
 }
 
-function pasteLink() {
-    navigator.clipboard.readText().then(text => {
-        document.getElementById("fbUrl").value = text;
-    }).catch(err => {
-        console.error("❌ Failed to paste:", err);
+function downloadVideo(url) {
+    let link = document.createElement("a");
+    link.href = url;
+    link.download = "video.mp4";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function copyLink(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        alert("📋 Link copied to clipboard!");
+    }).catch(() => {
+        alert("❌ Failed to copy link.");
     });
 }
