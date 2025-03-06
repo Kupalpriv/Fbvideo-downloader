@@ -1,28 +1,21 @@
-document.addEventListener("DOMContentLoaded", () => {});
-
 function downloadVideo() {
     let fbUrl = document.getElementById("fbUrl").value;
+    if (!fbUrl) return Swal.fire({ icon: "warning", title: "⚠️ Invalid URL", text: "Please enter a valid Facebook video URL!", confirmButtonColor: "#007bff" });
 
-    if (!fbUrl) {
-        Swal.fire({ icon: "warning", title: "⚠️ Invalid URL", text: "Please enter a valid Facebook video URL!", confirmButtonColor: "#007bff" });
-        return;
-    }
-
-    let apiUrl = `/download?url=${encodeURIComponent(fbUrl)}`;
-
-    fetch(apiUrl)
+    fetch(`/download?url=${encodeURIComponent(fbUrl)}`)
         .then(response => response.json())
         .then(data => {
             if (data.videoUrl) {
-                let videoTitle = data.title.replace(/[^\w\s]/gi, '').replace(/\s+/g, '_');
+                document.getElementById("video-thumbnail").src = data.thumbnail;
+                document.getElementById("video-thumbnail").style.display = "block";
+
+                let videoTitle = data.title.replace(/[^a-zA-Z0-9]/g, "_");
                 let downloadLink = document.createElement("a");
-                downloadLink.href = `/proxy?url=${encodeURIComponent(data.videoUrl)}&filename=${videoTitle}.mp4`;
+                downloadLink.href = `/proxy?url=${encodeURIComponent(data.videoUrl)}&title=${videoTitle}`;
                 downloadLink.download = `${videoTitle}.mp4`;
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
-            } else {
-                Swal.fire({ icon: "error", title: "❌ Download Failed", text: "Video not found!", confirmButtonColor: "#007bff" });
             }
         });
 }
