@@ -17,13 +17,7 @@ app.get("/download", async (req, res) => {
 
     try {
         const response = await axios.get(`https://kaiz-apis.gleeze.com/api/fbdl?url=${encodeURIComponent(videoUrl)}`);
-        const videoData = response.data;
-
-        if (videoData.videoUrl) {
-            res.json(videoData);
-        } else {
-            res.status(500).json({ error: "Video URL not found in API response" });
-        }
+        res.json(response.data);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch video" });
     }
@@ -31,12 +25,14 @@ app.get("/download", async (req, res) => {
 
 app.get("/proxy", async (req, res) => {
     const videoUrl = req.query.url;
+    const filename = req.query.filename || "video.mp4";
+
     if (!videoUrl) return res.status(400).json({ error: "No URL provided" });
 
     try {
         const response = await axios.get(videoUrl, { responseType: "stream" });
 
-        res.setHeader("Content-Disposition", "attachment; filename=video.mp4");
+        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
         res.setHeader("Content-Type", "video/mp4");
 
         response.data.pipe(res);
