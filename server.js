@@ -25,14 +25,15 @@ app.get("/download", async (req, res) => {
 
 app.get("/proxy", async (req, res) => {
     const videoUrl = req.query.url;
-    const filename = req.query.filename || "video.mp4";
+    const videoTitle = req.query.title || "video";
 
     if (!videoUrl) return res.status(400).json({ error: "No URL provided" });
 
     try {
         const response = await axios.get(videoUrl, { responseType: "stream" });
 
-        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        const sanitizedTitle = videoTitle.replace(/[^a-zA-Z0-9]/g, "_");
+        res.setHeader("Content-Disposition", `attachment; filename="${sanitizedTitle}.mp4"`);
         res.setHeader("Content-Type", "video/mp4");
 
         response.data.pipe(res);
