@@ -8,8 +8,13 @@ const app = express();
 app.use(cors());
 app.use(express.static("public"));
 
-let userCount = 0; // Track total downloads
-const logFilePath = path.join(__dirname, "download_logs.txt"); // Log file path
+let userCount = 0;
+const logFilePath = path.join(__dirname, "download_logs.txt");
+
+if (fs.existsSync(logFilePath)) {
+    const logs = fs.readFileSync(logFilePath, "utf8");
+    userCount = (logs.match(/Download request/g) || []).length;
+}
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
@@ -19,7 +24,6 @@ app.get("/download", async (req, res) => {
     const videoUrl = req.query.url;
     if (!videoUrl) return res.status(400).json({ error: "No URL provided" });
 
-    // Increment user count and log the download request
     userCount++;
     const logEntry = `Download request: ${videoUrl} at ${new Date().toISOString()}\n`;
     fs.appendFileSync(logFilePath, logEntry);
@@ -51,7 +55,6 @@ app.get("/proxy", async (req, res) => {
     }
 });
 
-// Endpoint to get user count
 app.get("/stats", (req, res) => {
     res.json({ userCount });
 });
