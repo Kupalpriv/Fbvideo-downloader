@@ -1,11 +1,26 @@
 function downloadVideo() {
-    let fbUrl = document.getElementById("fbUrl").value;
-    if (!fbUrl) return Swal.fire({ icon: "warning", title: "⚠️ Invalid URL", text: "Please enter a valid Facebook video URL!", confirmButtonColor: "#007bff" });
+    let fbUrl = document.getElementById("fbUrl").value.trim();
+
+    // Validate if the input is a valid Facebook video URL
+    if (!isValidFacebookUrl(fbUrl)) {
+        Swal.fire({
+            icon: "warning",
+            title: "⚠️ Invalid URL",
+            text: "Please enter a valid Facebook video URL!",
+            confirmButtonColor: "#007bff",
+        });
+        return;
+    }
 
     showLoading();
 
     fetch(`/download?url=${encodeURIComponent(fbUrl)}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to fetch video");
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.videoUrl) {
                 document.getElementById("video-thumbnail").src = data.thumbnail;
@@ -18,10 +33,17 @@ function downloadVideo() {
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
+            } else {
+                throw new Error("Invalid video URL or video not found");
             }
         })
         .catch(error => {
-            Swal.fire({ icon: "error", title: "Oops...", text: "Something went wrong!", confirmButtonColor: "#007bff" });
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: error.message || "Something went wrong! Please check the link and try again.",
+                confirmButtonColor: "#007bff",
+            });
         })
         .finally(() => {
             hideLoading();
@@ -40,4 +62,11 @@ function showLoading() {
 
 function hideLoading() {
     document.getElementById("loading-overlay").style.display = "none";
+}
+
+// Function to validate Facebook video URL
+function isValidFacebookUrl(url) {
+    // Regex to check if the URL is a valid Facebook video URL
+    const facebookUrlRegex = /^(https?:\/\/)?(www\.)?facebook\.com\/([a-zA-Z0-9\.\-]+)\/videos\/([0-9]+)\/?/;
+    return facebookUrlRegex.test(url);
 }
