@@ -69,78 +69,28 @@ body {
     display: none;
 }
 
-/* Stickman Running Animation */
-.stickman {
-    width: 100px;
-    height: 100px;
-    position: relative;
+/* Loading Indicator */
+.loader {
+    width: fit-content;
+    font-weight: bold;
+    font-family: monospace;
+    text-shadow: 
+        0 0 0 rgb(255 0 0), 
+        0 0 0 rgb(0 255 0), 
+        0 0 0 rgb(0 0 255);
+    font-size: 30px;
+    animation: l32 1s infinite cubic-bezier(0.5,-2000,0.5,2000);
 }
 
-.stickman .body {
-    width: 10px;
-    height: 40px;
-    background: #fff;
-    position: absolute;
-    top: 30px;
-    left: 45px;
+.loader:before {
+    content: "Loading...";
 }
 
-.stickman .head {
-    width: 20px;
-    height: 20px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    left: 40px;
-}
-
-.stickman .arm {
-    width: 10px;
-    height: 30px;
-    background: #fff;
-    position: absolute;
-    top: 30px;
-}
-
-.stickman .arm.left {
-    left: 30px;
-    transform-origin: top;
-    animation: swing-left 0.5s infinite alternate;
-}
-
-.stickman .arm.right {
-    right: 30px;
-    transform-origin: top;
-    animation: swing-right 0.5s infinite alternate;
-}
-
-.stickman .leg {
-    width: 10px;
-    height: 40px;
-    background: #fff;
-    position: absolute;
-    top: 70px;
-}
-
-.stickman .leg.left {
-    left: 40px;
-    transform-origin: top;
-    animation: swing-left 0.5s infinite alternate;
-}
-
-.stickman .leg.right {
-    right: 40px;
-    transform-origin: top;
-    animation: swing-right 0.5s infinite alternate;
-}
-
-@keyframes swing-left {
-    0% { transform: rotate(-20deg); }
-    100% { transform: rotate(20deg); }
-}
-
-@keyframes swing-right {
-    0% { transform: rotate(20deg); }
-    100% { transform: rotate(-20deg); }
+@keyframes l32 {
+    25%, 100% {
+        text-shadow: 
+            0.03px -0.01px 0.01px rgb(255 0 0), 
+            0.02px  0.02px 0     rgb(0 255 0), 
+            -0.02px  0.02px 0     rgb(0 0 255);
+    }
 }
