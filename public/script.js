@@ -2,7 +2,7 @@ function downloadVideo() {
     let fbUrl = document.getElementById("fbUrl").value;
     if (!fbUrl) return Swal.fire({ icon: "warning", title: "⚠️ Invalid URL", text: "Please enter a valid Facebook video URL!", confirmButtonColor: "#007bff" });
 
-    showLoading(); // Show loading indicator
+    showLoading();
 
     fetch(`/download?url=${encodeURIComponent(fbUrl)}`)
         .then(response => response.json())
@@ -24,8 +24,8 @@ function downloadVideo() {
             Swal.fire({ icon: "error", title: "Oops...", text: "Something went wrong!", confirmButtonColor: "#007bff" });
         })
         .finally(() => {
-            hideLoading(); // Hide loading indicator
-            updateUserCount(); // Update user count
+            hideLoading();
+            updateUserCount();
         });
 }
 
@@ -47,9 +47,8 @@ function updateUserCount() {
     fetch("/stats")
         .then(response => response.json())
         .then(data => {
-            document.getElementById("user-count").innerText = `Total Downloads: ${data.userCount}`;
+            document.getElementById("user-count").innerText = `Total Users: ${data.userCount}`;
         });
 }
 
-// Update user count when the page loads
 document.addEventListener("DOMContentLoaded", updateUserCount);
