@@ -25,7 +25,6 @@ function downloadVideo() {
         })
         .finally(() => {
             hideLoading();
-            updateUserCount();
         });
 }
 
@@ -42,13 +41,3 @@ function showLoading() {
 function hideLoading() {
     document.getElementById("loading-overlay").style.display = "none";
 }
-
-function updateUserCount() {
-    fetch("/stats")
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("user-count").innerText = `Total Users: ${data.userCount}`;
-        });
-}
-
-document.addEventListener("DOMContentLoaded", updateUserCount);
