@@ -1,8 +1,8 @@
 function downloadVideo() {
     let fbUrl = document.getElementById("fbUrl").value.trim();
 
-    // Validate if the input is a valid Facebook video URL
-    if (!isValidFacebookUrl(fbUrl)) {
+    // Basic validation to check if the input is a URL
+    if (!isValidUrl(fbUrl)) {
         Swal.fire({
             icon: "warning",
             title: "⚠️ Invalid URL",
@@ -64,9 +64,12 @@ function hideLoading() {
     document.getElementById("loading-overlay").style.display = "none";
 }
 
-// Function to validate Facebook video URL
-function isValidFacebookUrl(url) {
-    // Regex to check if the URL is a valid Facebook video URL
-    const facebookUrlRegex = /^(https?:\/\/)?(www\.)?facebook\.com\/([a-zA-Z0-9\.\-]+)\/videos\/([0-9]+)\/?/;
-    return facebookUrlRegex.test(url);
+// Function to check if the input is a valid URL
+function isValidUrl(url) {
+    try {
+        new URL(url); // This will throw an error if the URL is invalid
+        return true;
+    } catch (error) {
+        return false;
+    }
 }
